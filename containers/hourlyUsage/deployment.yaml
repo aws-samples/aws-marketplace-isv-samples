@@ -1,0 +1,46 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: mcp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registerusage-app
+  namespace: mcp
+  labels:
+    app: registerusage-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registerusage-app
+  template:
+    metadata:
+      labels:
+        app: registerusage-app
+    spec:
+      serviceAccountName: ${PRODUCT_NAME}-sa
+      volumes:
+        - name: shared-data
+          emptyDir: {}
+      containers:
+        - name: registerusage-app
+          image: $ECR_REPOSITORY:$PRODUCT_VERSION # Change the value here
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registerusage-service
+  namespace: mcp
+spec:
+  selector:
+    app: registerusage-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer

@@ -1,0 +1,25 @@
+Parameters:
+  App:
+    Type: String
+  Env:
+    Type: String
+  Name:
+    Type: String
+Resources:
+  meterusagepol:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: meteringactions
+            Effect: Allow
+            Action:
+              - license-manager:CheckoutLicense
+              - license-manager:CheckInLicense
+              - license-manager:ExtendLicenseConsumption
+              - license-manager:GetLicense
+            Resource: '*'
+Outputs:
+  meterusagepolarn:
+    Value: !Ref meterusagepol
