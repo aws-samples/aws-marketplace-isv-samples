@@ -113,7 +113,7 @@ copilot init
 
 > Congratulations!! You have sucessfully integrated a container application with Marketplace APIs and validated using Amazon ECS Cluster!!
 
-**Note - After you are done testing with you labs, Delete the clusters created using below command to avoid any unnecessary AWS infrastructure charges.**
+***Note - After you are done testing with you labs, Delete the clusters created using below command to avoid any unnecessary AWS infrastructure charges.***
 ```shell
 copilot svc delete --name hourlyusage
 copilot app delete --name sellerworkshop
@@ -157,7 +157,7 @@ kubectl logs pod/<POD_NAME> -c registerusage-app
 
 > Congratulations!! You have sucessfully integrated a container application with Marketplace APIs and validated using Amazon EKS Cluster!!
 
-**Note - After you are done testing with you labs, Delete the clusters created using below command to avoid any unnecessary AWS infrastructure charges.**
+***Note - After you are done testing with you labs, Delete the clusters created using below command to avoid any unnecessary AWS infrastructure charges.***
 ```shell
 kubectl delete -f ~/environment/sellerworkshop/aws-marketplace-isv-samples/containers/hourlyUsage/$PRODUCT_NAME-deployment.yaml
 eksctl delete cluster -f ~/environment/sellerworkshop/aws-marketplace-isv-samples/cluster/EKS/${PRODUCT_NAME-}cluster.yml
