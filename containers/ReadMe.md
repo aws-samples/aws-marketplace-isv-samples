@@ -29,7 +29,7 @@ AWS Marketplace integrates with other AWS services to provide both metering and 
 ## Solution Overview
 To demonstrate the integration here, the solution has a sample [flask app](https://github.com/pallets/flask) which integrates with AWS Marketplace and AWS License manager APIs. Based on the pricing model you want to try, You will make code changes to include the metadata information such as productID and productCode from your [limited listing](https://docs.aws.amazon.com/marketplace/latest/userguide/container-product-getting-started.html#create-container-product) and build a container image. Then, validate the image by deploying it into a test ECS cluster. Finally, you will check logs for a successful API calls and see if the sample flask server has started.
 
-#### Prerequisite
+## Prerequisite
 1) You need a Limited listing product from AWS Marketplace to proceed with the build and deploy steps.
 Please follow this YouTube Video on [How to start a container listing on AWS Marketplace](https://www.youtube.com/watch?v=TNhx0RdnGLg). For the limited listing, you need a ProductId, ProductCode to set up the integration with AWS Marketplace APIs.
 2) Software Requirements - Locally on your machine, you need to set up the below software before you can use run rest of the steps.
@@ -42,8 +42,8 @@ Please follow this YouTube Video on [How to start a container listing on AWS Mar
 
       
 
-#### Instructions - 
-#### Building a container image
+## Instructions - 
+### A. Building a container image
 Follow the below steps to build a container image with a Marketplace API integration.
 1) Set environment variables for productId, productcode and product name.
 ```
@@ -86,12 +86,12 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 aws ecr describe-images --image-ids ${ECR_REPOSITORY}:${PRODUCT_VERSION} --region us-east-1
 ```
 
-#### Deploying and Testing the image
+### B. Deploying and Testing the image
 
 Next step is testing your API integration by deploying your image into either an Amazon ECS or an Amazon EKS Cluster.
 
-##### Amazon ECS Deployment
-Deploying your sample application with AWS Marketplace integration into ECS Cluster is done using [Copilot](https://aws.github.io/copilot-cli/)
+#### B. 1. Amazon ECS Deployment
+   Deploying your sample application with AWS Marketplace integration into ECS Cluster is done using [Copilot](https://aws.github.io/copilot-cli/)
 
 1) In the sample project you cloned, there are few template files for deploying an ECS service using copilot. Let's make sure it is pointed to the right ECR image we built in the previous step. Depending on the pricing model choose the right subfolder.
 ```shell
@@ -119,7 +119,7 @@ copilot svc delete --name hourlyusage
 copilot app delete --name sellerworkshop
 ```
 
-##### Amazon EKS Deployment
+#### B. 2. Amazon EKS Deployment
 
 To test the API Integration in an EKS cluster, you need to create sample EKS cluster.
 
