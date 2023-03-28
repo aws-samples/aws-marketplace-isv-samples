@@ -1,4 +1,4 @@
-## AWS MarketplaceS
+## AWS Marketplace
 
 
 ## What does this repository help with?
