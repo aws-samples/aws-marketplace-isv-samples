@@ -35,6 +35,7 @@ pip install -r requirements.txt
 
 5. Start Flask Development application server: 
 ```shell 
+chmod +x run.sh
 ./run.sh 
 ```
 
