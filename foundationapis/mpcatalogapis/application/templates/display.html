@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <title>Product Listing</title>
+        <style>
+            table { border-collapse: collapse;}
+            th, td {border: 1px solid black; padding: 8px;}
+            th {background-color: burlywood;}
+        </style>
+    </head>
+    <body> 
+        <main>
+            <h1>{{title}}</h1>
+            <p>Welcome to Marketplace Catalog API Reference Web application</p>
+        </main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Serial Number</th>
+                    <th>Product Name</th>
+                    <th>Product ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in json_data %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{item.Name}}</td>
+                    <td><a href="/getproductdetail/{{item.EntityId}}" >{{item.EntityId}}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br><br>
+        <a href="/"><button>Go Home</button></a> 
+    </body>
+    
+</html>

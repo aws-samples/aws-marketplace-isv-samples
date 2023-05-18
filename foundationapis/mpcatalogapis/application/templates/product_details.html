@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <title>Product Listing</title>
+        <link rel="stylesheet" type="text/css" href="../static/common.css">
+    </head>
+    <body> 
+        <main>
+            <h1>{{title}}</h1>
+            <p>Welcome to Marketplace Catalog API Reference Web application</p>
+        </main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Title</th>
+                    <th>Product Code</th>
+                    <th>Product Short Description</th>
+                    <th>Product State</th>
+                    <th>Product Visibility</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set jsonstr = product_details_json.Description %}
+                <tr>
+                    <td>{{jsonstr.ProductTitle}}</td>
+                    <td>{{jsonstr.ProductCode}}</td>
+                    <td>{{jsonstr.ShortDescription}}</td>
+                    <td>{{jsonstr.ProductState}}</a></td>
+                    <td>{{jsonstr.Visibility}}</a></td>
+                </tr> 
+          </tbody>
+        </table>
+        <script src="../static/script.js"></script>
+        <h2 onclick="toggleContent(this)" class="collapsed"> Click to Expand/collapse Full Product details in JSON format</h2>
+        <div class="collapse-content">
+            {{product_details_json}}
+        </div>
+        <br><br>
+        <a href="/"><button>Go Home</button></a> 
+    </body>
+</html>
