@@ -25,6 +25,7 @@ To list a paid product on AWS marketplace, refer the below documentation on diff
 Here is a list of integration samples for interacting with AWS Marketplace from your Paid products.
 
 - [Containers](containers)
+- [Foundation APIs - MP Catalog](foundationapis/mpcatalogapis) 
 
 ## Security
 
