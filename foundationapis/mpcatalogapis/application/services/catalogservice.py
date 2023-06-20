@@ -131,12 +131,12 @@ class CatalogService:
         print('Value of change set details: ', details)
         response = self.client.start_change_set(
             Catalog=self.catalog,
-            ChangeSetName='Test change sets',
+            ChangeSetName=changeSet.get_change_request_name(),
             ChangeSet=[
                 {
                     'ChangeType':'UpdateInformation',
                     'Entity': {
-                        'Type':'AmiProduct@1.0',
+                        'Type':changeSet.get_product_type(),
                         'Identifier': changeSet.entity_id
                     },
                     'Details': details,
@@ -144,6 +144,6 @@ class CatalogService:
             ]
         )
 
-        print('Response from update_product after calling start change set.')
+        #print('Response from update_product after calling start change set.')
         print(response)
         return response 

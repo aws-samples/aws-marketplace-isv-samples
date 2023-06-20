@@ -274,7 +274,16 @@ def populate_change_set(request):
     details.set_keywords(request.form['keywords'])
     details.set_logo_url(request.form['logo_url'])
     details.set_sku(request.form['sku'])
+
+    cs.set_product_type(get_product_type(request.form['entity_arn']))
+
     cs.set_details(details)
+    cs.set_change_request_name(request.form['change_request_name'])
     cs.set_entityid(request.form['entity_id'])
     
     return cs
+
+def get_product_type(inputstr): 
+    words = inputstr.split('/')
+    product_type = words[1]
+    return (product_type + '@1.0')

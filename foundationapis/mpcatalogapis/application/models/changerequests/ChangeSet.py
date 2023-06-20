@@ -17,3 +17,15 @@ class ChangeSet:
     
     def set_entityid(self, entity_id):
         self.entity_id = entity_id
+
+    def set_change_request_name(self, cr_name):
+        self.change_request_name = cr_name 
+
+    def get_change_request_name(self):
+        return self.change_request_name
+    
+    def get_product_type(self):
+        return self.product_type
+    
+    def set_product_type(self, type):
+        self.product_type = type

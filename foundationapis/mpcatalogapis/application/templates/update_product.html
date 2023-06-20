@@ -29,7 +29,11 @@
         <div class="tab1">
             <h2>Update Product Information</h2>
             <form action="/updateproduct" method="post">
-                <label>Product Title:</label><br>
+
+                <label>Change Request Name:</label><br>
+                <input type="text" id="change_request_name" name="change_request_name" value="Test Change Request 1" class="my-text-field"><br>
+
+                <br><label>Product Title:</label><br>
                 <input type="text" id="product_title" name="product_title" required value={{product_title}} class="my-text-field"><br>
                 
                 <br><label>SKU - optional:</label><br>
