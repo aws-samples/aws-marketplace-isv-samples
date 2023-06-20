@@ -2,42 +2,40 @@
     <head>
         <meta charset="utf-8"> 
         <title>Update Product Listing</title>
-        <style>
-            table { border-collapse: collapse;}
-            th, td {border: 1px solid black; padding: 8px;}
-            th {background-color: burlywood;}
-        </style>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/common.css')}}">    
     </head>
     <body> 
         <main>
             <h1>{{title}}</h1>
             <p>Welcome to Marketplace Catalog API Reference Web application</p>
         </main>
-        <table>
-            <thead>
-                <tr>
-                    <th>Serial Number</th>
-                    <th>Product Change Requests Name</th>
-                    <th>Product Change Requests ID</th>
-                    <th>Product Change Requests Status</th>
-                    <th>Action</th>
-                </tr>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in json_data %}
-                <tr>
-                    <td>{{loop.index}}</td>
-                    <td>{{item.ChangeSetName}}</td>
-                    <td><a href="/retrievechangeset/{{item.ChangeSetId}}" >{{item.ChangeSetId}}</a></td>
-                    <td>{{item.Status}}</td>
-                    <td><a href="/cancelchangeset/{{item.ChangeSetId}}">Cancel</a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="tab1">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Serial Number</th>
+                        <th>Product Change Requests Name</th>
+                        <th>Product Change Requests ID</th>
+                        <th>Product Change Requests Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in json_data %}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td>{{item.ChangeSetName}}</td>
+                        <td><a href="/retrievechangeset/{{item.ChangeSetId}}" >{{item.ChangeSetId}}</a></td>
+                        <td>{{item.Status}}</td>
+                        <td><a href="/cancelchangeset/{{item.ChangeSetId}}">Cancel</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <br><br>
-        <a href="/"><button>Go Home</button></a> 
+        <a href="/"><button class="my-button">Go Home</button></a> 
     </body>
     
 </html>

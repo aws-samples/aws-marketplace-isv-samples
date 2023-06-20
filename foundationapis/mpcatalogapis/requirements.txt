@@ -2,3 +2,4 @@ Flask
 Werkzeug
 boto3
 Jinja2
+Flask_WTF

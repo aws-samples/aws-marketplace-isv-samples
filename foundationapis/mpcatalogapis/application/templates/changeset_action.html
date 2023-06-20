@@ -3,14 +3,17 @@
 <head>
     <meta charset="utf-8">
     <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/common.css')}}">
 </head>
 <body>
     <main>
         <h1>{{title}}</h1>
         <p>Welcome to Marketplace Catalog API Reference Web application</p>
     </main>
-    Status of Action: {{changeset_details_json}}
-    <br><br>
+    <div class="tab1">
+        Status of Action: {{changeset_details_json}}
+        <br><br>
+    </div>
     <a href="/"><button>Go Home</button></a> 
     <a href="/getchangesets"><button>Change Request List</button></a> 
 </body>

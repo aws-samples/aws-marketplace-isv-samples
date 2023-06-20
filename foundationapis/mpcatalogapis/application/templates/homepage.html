@@ -3,19 +3,26 @@
 <head>
     <meta charset="utf-8">
     <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/common.css')}}">
+
 </head>
 <body>
     <main>
         <h1>{{title}}</h1>
         <p>Welcome to Marketplace Catalog API Reference Web application</p>
     </main>
-    <nav>
-        <ul>
-            <li><a href="/getproducts/ami">Get Catalog Products for AMIs</a></li>
-            <li><a href="/getproducts/container">Get Catalog Products for Containers</a></li>
-            <li><a href="/getproducts/saas">Get Catalog Products for SAAS</a></li>
-            <li><a href="/getchangesets">Get Catalog ChangeSet List</a></li>
-        </ul>
-    </nav>
+    <div class="menu">
+        <!-- #include virtual="menu_bar.html" -->
+    </div>
+    <div class="tab1">
+        <nav>
+            <ul>
+                <li><a href="/getproducts/ami">Get listing for AMI-based products</a></li>
+                <li><a href="/getproducts/container">Get listing for container-based products</a></li>
+                <li><a href="/getproducts/saas">Get listing for SaaS-based products</a></li>
+                <li><a href="/getchangesets">Get change set listing</a></li>
+            </ul>
+        </nav>
+    </div>
 </body>
 </html>
