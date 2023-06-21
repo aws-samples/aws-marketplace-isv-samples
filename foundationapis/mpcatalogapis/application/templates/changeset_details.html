@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <title>Product Change Request Details</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/common.css')}}">
+    </head>
+    <body> 
+        <main>
+            <h1>{{title}}</h1>
+            <p>Welcome to Marketplace Catalog API Reference Web application</p>
+        </main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Change Request Name</th>
+                    <th>Product Change Request ARN</th>
+                    <th>Product Change Request ID</th>
+                    <th>Product Change Request Status</th>
+                    <th>Product Change Request Failure Code</th>
+                    <th>Product Change Request Failure Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set jsonstr = product_details_json %}
+                <tr>
+                    <td>{{jsonstr.ChangeSetName}}</td>
+                    <td>{{jsonstr.ChangeSetArn}}</td>
+                    <td>{{jsonstr.ChangeSetId}}</td>
+                    <td>{{jsonstr.Status}}</a></td>
+                    <td>{{jsonstr.FailureCode}}</a></td>
+                    <td>{{jsonstr.FailureDescription}}</a></td>
+                </tr> 
+          </tbody>
+        </table>
+        <h2 onclick="toggleContent(this)" class="collapsed"> Click to Expand/collapse for Set of Changes initiated</h2>
+        <div class="collapse-content">
+            {{product_details_json}}
+        </div>
+    
+        <a href="/"><button>Go Home</button></a> 
+        <a href="/getchangesets"><button>Change Request List</button></a> 
+        <script src="{{url_for('static', filename='script.js')}}"></script>
+    </body>
+</html>

@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <title>Product Listing</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/common.css')}}">
+    </head>
+    <body> 
+        <main>
+            <h1>{{title}}</h1>
+            <p>Welcome to Marketplace Catalog API Reference Web application</p>
+        </main>
+        <div class="tab1">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Serial Number</th>
+                        <th>Product Name</th>
+                        <th>Product ID</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in json_data %}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td>{{item.Name}}</td>
+                        <td><a href="/getproductdetail/{{item.EntityId}}" >{{item.EntityId}}</a></td>
+                        <td>
+                            <a href="/managetags/tag/{{item.EntityArn}}"><button>Manage Tags</button></a> 
+                            <a href="/getproductform/{{item.EntityArn}}"><button>Update Product</button></a> 
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br><br>
+        <a href="/"><button>Go Home</button></a> 
+    </body>
+    
+    
+</html>

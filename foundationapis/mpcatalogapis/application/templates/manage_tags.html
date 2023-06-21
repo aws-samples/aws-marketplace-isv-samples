@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <title>Manage Tag Resource</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/common.css')}}">
+        <style>
+            table { border-collapse: collapse;}
+            th, td {border: 1px solid black; padding: 8px;}
+            th {background-color: burlywood;}
+        </style>
+    </head>
+    <body>
+        <h1>AWS Marketplace Catalog Web Application - Manage Tags</h1>
+        <h2>Catalog entity: {{entity_arn}}</h2>
+        
+        <div class="tab1">
+            <table>
+                <h3>Current List of Tags for Catalog entity:</h3>
+                <thead>
+                    <tr>
+                        <th>Tag Name</th>
+                        <th>Tag Value</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in tags_list_json %}
+                    <tr>
+                        <td>{{item.Key}}</td>
+                        <td>{{item.Value}}</td>
+                        <td><a href="/removetag/{{entity_arn}}/{{item.Key}}"><button>Untag</button></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <h3> Add Tags:</h3>
+            <form action="/processtag" method="post">
+                <label>Tag Name:</label>
+                <input type="text" id="tagname" name="tagname" required><br>
+                <br><label>Tag Value:</label>
+                <input type="text" id="tagvalue" name="tagvalue" required><br>
+                <input type="hidden" value="{{entity_arn}}" id="entity_arn" name="entity_arn"><br>
+                <input type="submit" value="Add Tag">
+            </form>
+        </div>
+        <a href="/"><button>Go Home</button></a>
+    
+    </body>
+</html>
