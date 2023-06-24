@@ -22,6 +22,10 @@ def initialize_catalogservice():
 def json_loads(value):
     return json.loads(value)
 
+@app.template_filter('json_pretty')
+def json_pretty(value):
+    return json.dumps(value, indent=4)
+
 @app.route("/")
 def main_page(): 
     return render_template('homepage.html', title='Marketplace Catalog API Reference', page='home')
