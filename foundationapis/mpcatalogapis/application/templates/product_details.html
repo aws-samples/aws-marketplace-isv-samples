@@ -14,6 +14,7 @@
                 <tr>
                     <th>Product Title</th>
                     <th>Product Code</th>
+                    <th>Product Id</th>
                     <th>Product Short Description</th>
                     <th>Product State</th>
                     <th>Product Visibility</th>
@@ -24,6 +25,7 @@
                 <tr>
                     <td>{{jsonstr.ProductTitle}}</td>
                     <td>{{jsonstr.ProductCode}}</td>
+                    <td>{{entity_id}}</td>
                     <td>{{jsonstr.ShortDescription}}</td>
                     <td>{{jsonstr.ProductState}}</a></td>
                     <td>{{jsonstr.Visibility}}</a></td>
@@ -31,9 +33,9 @@
           </tbody>
         </table>
         <script src="../static/script.js"></script>
-        <h2 onclick="toggleContent(this)" class="collapsed"> Click to Expand/collapse Full Product details in JSON format</h2>
+        <h3 onclick="toggleContent(this)" class="collapsed"> Click to Expand/collapse Full Product details in JSON format</h3>
         <div class="collapse-content">
-            {{product_details_json}}
+            <pre>{{ product_details_json | json_pretty }}</pre>
         </div>
         <br><br>
         <a href="/"><button>Go Home</button></a> 

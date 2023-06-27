@@ -10,6 +10,7 @@ import logging
 import json
 import traceback
 
+
 """ This is the main controller which contains the various Routes used to invoke the MP Catalog service."""
 app = Flask(__name__)
 
@@ -21,6 +22,7 @@ secret_key = secrets.token_hex(16)
 print('secret key is: %s', secret_key)
 app.config['SECRET_KEY'] = secret_key
 csrf = CSRFProtect(app)
+
 
 @main_blueprint.before_request
 def initialize_catalogservice(): 
@@ -84,7 +86,7 @@ def get_product_details(productid):
 
     result = json.loads(result['Details'])
     #logging.info(result)
-    return render_template('product_details.html', title='Marketplace Catalog - Product Details Page', product_details_json= result)
+    return render_template('product_details.html', title='Marketplace Catalog - Product Details Page', product_details_json= result, entity_id=productid)
 
 # To get list of all change request sets performed on products. 
 @main_blueprint.route("/getchangesets")
@@ -227,7 +229,7 @@ def get_update_product_form(part,type,id):
         logging.error(f'Exception occured while tagging for ARN: ', entity_arn)
         result= str(ex)
 
-    return render_template('update_product.html', title='Marketplace Catalog - Update Product Page', result_json=details_json, entity_arn = entity_arn, entity_id = id)
+    return render_template('update_product.html', title='Marketplace Catalog - Update Product Page', result_json=details_json, entity_arn = entity_arn, entity_id = id, category_list = get_category_list())
 
 
 @main_blueprint.route("/updateproduct", methods=['POST'])
@@ -235,12 +237,10 @@ def update_product():
     logging.info('Initiating Update operation for the product.')
     catalog_service = app.config['catalog_service'] 
     entity_arn = request.form['entity_arn']
-    entity_id = request.form['entity_id']
     product_title = request.form['product_title']
-    result1 = ''
-    result2 = ''
-    details_str = ''
-    details_json = ''
+    change_set_id = ''
+    result = ''
+
   
     logging.info('Value of arn is: %s', entity_arn)
     logging.info('Value of product title is: %s', product_title)
@@ -248,19 +248,18 @@ def update_product():
         cs = populate_change_set(request)
         result1 = catalog_service.update_product(cs) 
         if result1['ResponseMetadata']['HTTPStatusCode'] == 200:
-            print('Change set operation was successful. Now, retrieve product details.')
-            result2 = catalog_service.getProductDetails(entity_id) 
-
+            print('Change set operation was successful. Now, provide details of the change set.')
         print(result1)
-        if result2['ResponseMetadata']['HTTPStatusCode'] == 200: 
-            details_str = result2['Details']
-            details_json = json.loads(details_str)
-
+        change_set_id = result1['ChangeSetId']
+        
+        template_str = render_template('update_product.html', title='Marketplace Catalog - Update Product Page', result=change_set_id, entity_arn = entity_arn)
     except Exception as ex:
-        logging.error(f'Exception occured while tagging for ARN: ', entity_arn)
-        result= str(ex)
+        logging.error(f'Exception occured while updating for the product: ', entity_arn)
+        result1= str(ex)
+        print(result1)
+        template_str = render_template('update_product.html', title='Marketplace Catalog - Update Product Page', result=result1, entity_arn = entity_arn, errorPresent = True)
 
-    return render_template('update_product.html', title='Marketplace Catalog - Update Product Page', result_json=details_json, entity_arn = entity_arn)
+    return template_str
 
 def populate_change_set(request): 
     cs = ChangeSet() 
@@ -287,3 +286,8 @@ def get_product_type(inputstr):
     words = inputstr.split('/')
     product_type = words[1]
     return (product_type + '@1.0')
+
+
+def get_category_list(): 
+    items = ['Backup & Recovery', 'Data Catalogs', 'Databases', 'Operating System', 'Security', 'Storage', 'Network','Devops', 'IoT', 'Industries', 'Professional Services', 'ML' ]
+    return items

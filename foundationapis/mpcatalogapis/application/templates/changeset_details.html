@@ -32,9 +32,9 @@
                 </tr> 
           </tbody>
         </table>
-        <h2 onclick="toggleContent(this)" class="collapsed"> Click to Expand/collapse for Set of Changes initiated</h2>
+        <h3 onclick="toggleContent(this)" class="collapsed"> Click to Expand/collapse for Set of Changes initiated</h3>
         <div class="collapse-content">
-            {{product_details_json}}
+            <pre>{{ product_details_json | json_pretty }}</pre>
         </div>
     
         <a href="/"><button>Go Home</button></a> 

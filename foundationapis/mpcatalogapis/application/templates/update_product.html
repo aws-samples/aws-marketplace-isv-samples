@@ -11,67 +11,94 @@
         </main>
         <div class="tab">
             <button class="tab-link active" onclick="openTab(event, 'tab1')">Product Information</button>
-            <button class="tab-link" onclick="openTab(event, 'tab2')">Update Allowlist</button>
-            <button class="tab-link" onclick="openTab(event, 'tab3')">Update Product Visiblity</button>
+            <!-- button class="tab-link" onclick="openTab(event, 'tab2')">Update Allowlist</button>
+            <button class="tab-link" onclick="openTab(event, 'tab3')">Update Product Visiblity</button -->
         </div>
-        <!-- {{result_json | tojson(indent=4)}} -->
+    
         <br>
-        {% if result_json is not none %} 
-            {% set product_title = result_json['Description'].ProductTitle -%}
-            {% set short_description = result_json['Description'].ShortDescription -%}
-            {% set long_description = result_json['Description'].LongDescription -%}
-            {% set categories = result_json['Description'].Categories -%}
-            {% set keywords = result_json['Description'].SearchKeywords -%}   
-            {% set highlights = result_json['Description'].Highlights -%} 
-            {% set sku = result_json['Description'].Sku -%} 
+        {% if errorPresent %}
+            <p>There is error detected for update product action. </p>
+            {{result}}
+
+        {% elif result %} 
+            {% set change_set_id = result -%}
+            <p>The StartChangeSet - Update Product information action may take some time 
+                to reflect the changes. Here is the ID that you can use to check the status 
+                in the AWS Marketplace Management Portal.</p>
+                <p>change set id  = {{result}}</p>
+                <p><a href='/retrievechangeset/{{change_set_id}}'>Click here</a> to know more about the status of this change set request</p>            
+        {% else %}
+            
+            {% if result_json %}
+                {% set highlights = result_json['Description']['Highlights'] %}
+                {% set keywords = result_json['Description']['SearchKeywords'] %}
+                {% set long_description  = result_json['Description']['LongDescription'] -%}
+                {% set short_description  = result_json['Description']['ShortDescription'] -%}
+                {% set product_title = result_json['Description']['ProductTitle'] -%}
+                {% set sku = result_json['Description']['Sku'] -%}
+                {% set logo_url = result_json['PromotionalResources']['LogoUrl'] -%}
+
+            {% endif %}
+            <div class="tab1">
+                <h2>Update Product Information</h2>
+                <form action="/updateproduct" method="post">
+
+                    <label>* Change Request Name:</label><br>
+                    <input type="text" id="change_request_name" name="change_request_name" value="Test Change Request 1" class="my-text-field"><br>
+
+                    <br><label>* Product Title:</label><br>
+                    <input type="text" id="product_title" name="product_title" required value='{{product_title}}' class="my-text-field"><br>
+                    
+                    <br><label>SKU - optional:</label><br>
+                    <input type="text" id="sku" name="sku" value="{{sku}}" class="my-text-field"><br>
+
+                    <br><label>* Product logo S3 URL:</label><br>
+                    <input type="text" id="logo_url" name="logo_url" value="{{logo_url}}" class="my-text-field"><br>
+
+                    <br><label>* Short description:</label><br>
+                    <input type="text" id="short_description" name="short_description" value='{{short_description}}' class="my-text-field"><br>
+
+                    <br><label>* Long description:</label><br>
+                    <input type="textarea" id="long_description" name="long_description" rows="10" cols="40" value='{{long_description}}' class="my-textarea-field"><br>
+                    
+                    
+                    <br><label>* Categories: (Please select upto 3)</label><br>
+                    <select id="categories" name="categories" multiple class="my-select">
+                        {% for item in category_list %}
+                            <option value="{{ item }}">{{item}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <br><label>* Search Keywords:</label><br>
+                    <select id="keywords" name="keywords" multiple class="my-select">
+                        {% for item in keywords %}
+                            <option value="{{ item }}" selected>{{item}}</option>
+                        {% endfor %}
+                    </select>
+
+
+                    <br><label>* Highlights:</label><br>
+                    <select id="highlights" name="highlights" multiple class="my-select">
+                        {% for item in highlights %}
+                            <option value="{{ item }}" selected>{{item}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <input type="hidden" value="{{entity_arn}}" id="entity_arn" name="entity_arn"><br>
+                    <input type="hidden" value="{{entity_id}}" id="entity_id" name="entity_id"><br>
+                    <input type="submit" value="Submit">
+                </form>
+                
+            </div>
         {% endif %}
 
-        <div class="tab1">
-            <h2>Update Product Information</h2>
-            <form action="/updateproduct" method="post">
-
-                <label>Change Request Name:</label><br>
-                <input type="text" id="change_request_name" name="change_request_name" value="Test Change Request 1" class="my-text-field"><br>
-
-                <br><label>Product Title:</label><br>
-                <input type="text" id="product_title" name="product_title" required value={{product_title}} class="my-text-field"><br>
-                
-                <br><label>SKU - optional:</label><br>
-                <input type="text" id="sku" name="sku" class="my-text-field"><br>
-
-                <br><label>Product logo S3 URL:</label><br>
-                <input type="text" id="logo_url" name="logo_url" class="my-text-field"><br>
-
-                <br><label>Short description:</label><br>
-                <input type="text" id="short_description" name="short_description" value={{short_description}} class="my-text-field"><br>
-
-                <br><label>Long description:</label><br>
-                <input type="textarea" id="long_description" name="long_description" rows="10" cols="40" value={{long_description}} class="my-textarea-field"><br>
-
-                <br><label>Categories:</label><br>
-                <input type="text" id="categories" name="categories" value={{categories}} class="my-text-field"><br>
-
-                <br><label>Search Keywords:</label><br>
-                <input type="text" id="keywords" name="keywords" value={{keywords}} class="my-text-field"><br>
-
-                <br><label>Highlights:</label><br>
-                <input type="text" id="highlights" name="highlights" value={{highlights}} class="my-text-field"><br>
-
-
-                <input type="hidden" value="{{entity_arn}}" id="entity_arn" name="entity_arn"><br>
-                <input type="hidden" value="{{entity_id}}" id="entity_id" name="entity_id"><br>
-                <input type="submit" value="Submit">
-            </form>
-
-        </div>
-       
         <!-- div class="tab2">
             <h2>Update Allowlist</h2>
         </div>
         <div class="tab3">
             <h2>Update Product Visibility</h2>
         </div -->
-        <a href="/"><button>Go Home</button></a> 
+        <br> <a href="/"><button>Go Home</button></a> 
         <script src="{{url_for('static', filename='script.js')}}"></script>
     </body>
 </html>

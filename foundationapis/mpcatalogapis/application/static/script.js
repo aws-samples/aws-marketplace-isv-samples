@@ -33,3 +33,11 @@ function openTab(event, tabName) {
 function goback() {
     window.history.back()
 }
+
+var selectElement = document.getElementById("categories");
+Array.from(selectElement.options).forEach(function(option) {
+    option.addEventListener('mousedown', function(event) {
+        event.preventDefault();
+        this.selected = !this.selected; 
+    });
+});
