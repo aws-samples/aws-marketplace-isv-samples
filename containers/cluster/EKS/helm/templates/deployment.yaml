@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }} # Need to externalize
+  namespace: {{ .Values.namespace }} # Need to externalize
+  labels:
+    app: sample-helm-app
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }} # Need to externalize
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }} # Need to externalize
+    spec:
+      {{- if .Values.serviceAccount.create -}}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end }}
+      volumes:
+        - name: shared-data
+          emptyDir: {}
+      containers:
+        - name: {{ .Values.appName }}
+          image: {{ .Values.image.repository }}
+          ports:
+            - containerPort: 80
