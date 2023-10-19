@@ -1,0 +1,4 @@
+Flask
+flask-restplus
+Werkzeug
+boto3
