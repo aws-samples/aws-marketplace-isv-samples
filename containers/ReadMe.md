@@ -178,6 +178,7 @@ export PRODUCT_NAME = <productname>
 export ECR_IMAGE_REPOSITORY = <ecrimagerepourl>
 export ECR_HELM_REPOSITORY = <ecrhelmrepourl>
 export PRODUCT_VERSION = <version_tag>
+export CHART_NAME= ${ECR_HELM_REPOSITORY##*/}
 ```
 3) Navigate into respective code directory for free pricing model.
 ```shell
@@ -190,11 +191,11 @@ docker build --build-arg -t ${ECR_IMAGE_REPOSITORY}:${PRODUCT_VERSION} .
 ```
 5) Push the docker image to your ECR repo
 ```shell
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REPOSITORY} | docker push ${ECR_REPOSITORY}:${PRODUCT_VERSION}
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_IMAGE_REPOSITORY%%/*} | docker push ${ECR_IMAGE_REPOSITORY}:${PRODUCT_VERSION}
 ```
 6) To check the docker images pushed to ECR repository, execute the below command.
 ```shell
-aws ecr describe-images --image-ids ${ECR_REPOSITORY}:${PRODUCT_VERSION} --region us-east-1
+aws ecr describe-images --image-ids ${ECR_IMAGE_REPOSITORY}:${PRODUCT_VERSION} --region us-east-1
 ```
 
 #### B. Test HELM deployment
@@ -229,12 +230,12 @@ kubectl delete namespace/$PRODUCT_NAME-nm
 ```shell
 cd ~/environment/SellerWorkshop/aws-marketplace-isv-samples/containers/cluster/EKS/helm
 ```
-2) Set the environment variable for Helm ECR repo url under aws marketplace listing. Package the helm chart
-
-3) Push the helm chart into HELM ECR repo under AWS Marketplace listing
+2) Package and Push the helm chart into HELM ECR repo under AWS Marketplace listing
 ```shell
 export HELM_EXPERIMENTAL_OCI=1
 
-aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin ${ECR_HELM_REPOSITORY} | helm push oci://${ECR_HELM_REPOSITORY}:${PRODUCT_VERSION}
+helm package .
+
+aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin oci://${ECR_HELM_REPOSITORY%%/*} | helm push $CHART_NAME-$PRODUCT_VERSION.tgz oci://${ECR_HELM_REPOSITORY%/*}
 ```
 
