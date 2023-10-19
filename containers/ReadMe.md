@@ -46,29 +46,29 @@ Please follow this YouTube Video on [How to start a container listing on AWS Mar
 ### A. Building a container image
 Follow the below steps to build a container image with a Marketplace API integration.
 1) Set environment variables for productId, productcode and product name.
-```
+```shell
 export PRODUCT_ID = <productid>
 export PRODUCT_CODE = <productcode>
 export PRODUCT_NAME = <productname>
 ```
 2) Navigate into respective code directory based on pricing model selected. 
-```
+```shell
 For hourly product, navigate to
 
 cd ~/environment/SellerWorkshop/aws-marketplace-isv-samples/containers/hourlyUsage
 ```
-```
+```shell
 For custom metered product, navigate to
 
 cd ~/environment/SellerWorkshop/aws-marketplace-isv-samples/containers/customMetering
 ```
-```
+```shell
 For Upfront or Contract priced product, navigate to
 
 cd ~/environment/SellerWorkshop/aws-marketplace-isv-samples/containers/contract
 ```
 3) Create a ECR repository under your limited listing product following [Add Repository Documentation](https://docs.aws.amazon.com/marketplace/latest/userguide/container-product-getting-started.html#add-repositories) and set the ecrrepourl below along with a version tag.
-```
+```shell
 export ECR_REPOSITORY = <ecrrepourl>
 export PRODUCT_VERSION = <version_tag>
 ```
@@ -162,3 +162,79 @@ kubectl logs pod/<POD_NAME> -c registerusage-app
 kubectl delete -f ~/environment/sellerworkshop/aws-marketplace-isv-samples/containers/hourlyUsage/$PRODUCT_NAME-deployment.yaml
 eksctl delete cluster -f ~/environment/sellerworkshop/aws-marketplace-isv-samples/cluster/EKS/${PRODUCT_NAME-}cluster.yml
 ```
+
+## Use case specific deployment
+### Deploy a free helm product - Build Container Image
+
+Follow the below steps to build a free container image and deploy using a helm chart.
+
+#### A. Build Container image and push to ECR repo
+1) Set environment variables for product name. 
+```shell
+export PRODUCT_NAME = <productname>
+```
+2) Create two ECR repositories under your limited listing product following [Add Repository Documentation](https://docs.aws.amazon.com/marketplace/latest/userguide/container-product-getting-started.html#add-repositories). Create one repository for the free container image versions and another for the helm chart. Set the ecrimagerepourl, ecrhelmrepourl below along with a version tags for both. 
+```shell
+export ECR_IMAGE_REPOSITORY = <ecrimagerepourl>
+export ECR_HELM_REPOSITORY = <ecrhelmrepourl>
+export PRODUCT_VERSION = <version_tag>
+```
+3) Navigate into respective code directory for free pricing model.
+```shell
+cd ~/environment/SellerWorkshop/aws-marketplace-isv-samples/containers/free
+```
+4) Build the docker image using
+```shell
+
+docker build --build-arg -t ${ECR_IMAGE_REPOSITORY}:${PRODUCT_VERSION} .
+```
+5) Push the docker image to your ECR repo
+```shell
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REPOSITORY} | docker push ${ECR_REPOSITORY}:${PRODUCT_VERSION}
+```
+6) To check the docker images pushed to ECR repository, execute the below command.
+```shell
+aws ecr describe-images --image-ids ${ECR_REPOSITORY}:${PRODUCT_VERSION} --region us-east-1
+```
+
+#### B. Test HELM deployment
+To test the helm chart, substitute environment variables for image url and product name into values.yaml
+
+```shell
+cd ~/environment/SellerWorkshop/aws-marketplace-isv-samples/containers/cluster/EKS/helm
+envsubst < Chart.yaml > Chart-1.yaml && rm Chart.yaml && mv Chart-1.yaml Chart.yaml
+envsubst < values.yaml > values-1.yaml && rm values.yaml && mv values-1.yaml values.yaml
+```
+
+Deploy the helm chart using the ** helm install ** command.
+```shell
+helm install release1 --create-namespace -n $PRODUCT_NAME-nm .
+```
+
+You can check the deployed objects using below kubectl command
+```shell
+kubectl get all -n $PRODUCT_NAME-nm
+```
+
+You can test your deployed by hitting the External-IP of the service at port 80. You should see the "Hello World" message
+
+To uninstall the all the objects installed, 
+```shell
+kubectl delete namespace/$PRODUCT_NAME-nm
+```
+
+#### C. Package and push helm chart
+
+1) Navigate into helm directory
+```shell
+cd ~/environment/SellerWorkshop/aws-marketplace-isv-samples/containers/cluster/EKS/helm
+```
+2) Set the environment variable for Helm ECR repo url under aws marketplace listing. Package the helm chart
+
+3) Push the helm chart into HELM ECR repo under AWS Marketplace listing
+```shell
+export HELM_EXPERIMENTAL_OCI=1
+
+aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin ${ECR_HELM_REPOSITORY} | helm push oci://${ECR_HELM_REPOSITORY}:${PRODUCT_VERSION}
+```
+
